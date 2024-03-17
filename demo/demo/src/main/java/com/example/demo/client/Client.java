@@ -1,8 +1,22 @@
 package com.example.demo.client;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
+@Entity
+@Table
 public class Client {
+    @Id
+    @SequenceGenerator(
+            name="client_sequence",
+            sequenceName = "client_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "client_sequence"
+    )
     private Long id;
     private String name;
     private Integer ph_number;
