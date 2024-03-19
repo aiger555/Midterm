@@ -20,22 +20,22 @@ public class Client {
     private Long id;
     private String name;
     private Integer ph_number;
-    private LocalDate date;
+    private LocalDate ddate;
 
     public Client() {
     }
 
-    public Client(Long id, String name, Integer ph_number, LocalDate date) {
+    public Client(Long id, String name, Integer ph_number, LocalDate ddate) {
         this.id = id;
         this.name = name;
         this.ph_number = ph_number;
-        this.date = date;
+        this.ddate = ddate;
     }
 
-    public Client(String name, Integer ph_number, LocalDate date) {
+    public Client(String name, Integer ph_number, LocalDate ddate) {
         this.name = name;
         this.ph_number = ph_number;
-        this.date = date;
+        this.ddate = ddate;
     }
 
     public Long getId() {
@@ -63,7 +63,7 @@ public class Client {
     }
 
     public LocalDate getDate() {
-        return date;
+        return ddate;
     }
 
     @Override
@@ -72,12 +72,12 @@ public class Client {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", ph_number=" + ph_number +
-                ", date=" + date +
+                ", ddate=" + ddate +
                 '}';
     }
 
     public void setDate(LocalDate date) {
-        this.date = date;
+        this.ddate = ddate;
     }
 
 

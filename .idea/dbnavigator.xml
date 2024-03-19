@@ -7,12 +7,23 @@
     <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="a85c1836-4c5b-4d34-aedd-60d4dd596445">
-      <console name="Connection" type="STANDARD" schema="" session="Main" />
+    <connection id="59eb22c1-bd25-4de3-9058-11c84ffa25ce">
+      <console name="cargo" type="STANDARD" schema="" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files />
+  </component>
+  <component name="DBNavigator.Project.ExecutionManager">
+    <retain-sticky-names value="false" />
+  </component>
+  <component name="DBNavigator.Project.MethodExecutionManager">
+    <method-browser />
+    <execution-history>
+      <group-entries value="true" />
+      <execution-inputs />
+    </execution-history>
+    <argument-values-cache />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
@@ -20,9 +31,9 @@
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="a85c1836-4c5b-4d34-aedd-60d4dd596445" active="true" signed="true">
+      <connection id="59eb22c1-bd25-4de3-9058-11c84ffa25ce" active="true" signed="true">
         <database>
-          <name value="Connection" />
+          <name value="cargo" />
           <description value="" />
           <database-type value="POSTGRES" />
           <config-type value="BASIC" />
@@ -33,7 +44,7 @@
           <url-type value="DATABASE" />
           <host value="localhost" />
           <port value="5432" />
-          <database value="cargo" />
+          <database value="postgres" />
           <tns-folder value="" />
           <tns-profile value="" />
           <type value="USER_PASSWORD" />
