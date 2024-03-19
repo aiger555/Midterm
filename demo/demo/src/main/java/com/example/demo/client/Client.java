@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table
+@Table(name = "clients")
 public class Client {
     @Id
     @SequenceGenerator(
@@ -66,6 +66,10 @@ public class Client {
         return ddate;
     }
 
+    public void setDate(LocalDate date) {
+        this.ddate = ddate;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
@@ -74,10 +78,6 @@ public class Client {
                 ", ph_number=" + ph_number +
                 ", ddate=" + ddate +
                 '}';
-    }
-
-    public void setDate(LocalDate date) {
-        this.ddate = ddate;
     }
 
 
