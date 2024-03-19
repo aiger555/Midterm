@@ -8,15 +8,7 @@ import java.time.LocalDate;
 @Table(name = "clients")
 public class Client {
     @Id
-    @SequenceGenerator(
-            name="client_sequence",
-            sequenceName = "client_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "client_sequence"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private Integer ph_number;
