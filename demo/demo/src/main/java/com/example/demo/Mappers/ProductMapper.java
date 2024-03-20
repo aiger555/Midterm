@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface ProductMapper {
 
@@ -15,4 +17,5 @@ public interface ProductMapper {
     Product toEntity(ProductDTO productDto);
 
     ProductDTO toDto(Product product);
+    List<ProductDTO> toDtoList(List<Product> productList);
 }

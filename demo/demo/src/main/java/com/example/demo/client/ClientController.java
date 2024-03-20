@@ -16,7 +16,7 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
-    @Autowired
+
     private ClientMapper clientMapper;
 
     // Get all clients

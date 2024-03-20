@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface ShipmentMapper {
 
@@ -15,5 +17,6 @@ public interface ShipmentMapper {
     Shipment toEntity(ShipmentDTO shipmentDto);
 
     ShipmentDTO toDto(Shipment shipment);
+    List<ShipmentDTO> toDtoList(List<Shipment> shipments);
 }
 

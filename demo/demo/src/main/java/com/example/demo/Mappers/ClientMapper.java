@@ -1,35 +1,24 @@
 package com.example.demo.Mappers;
+
 import com.example.demo.DTO.ClientDTO;
 import com.example.demo.client.Client;
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 
+@Mapper
 @Component
-public class ClientMapper {
+public interface ClientMapper {
 
-    private final ModelMapper modelMapper;
     ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
-    public ClientMapper(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
-    }
+    ClientDTO toDto(Client client);
 
-    public ClientDTO toDto(Client client) {
-        return modelMapper.map(client, ClientDTO.class);
-    }
+    Client toEntity(ClientDTO clientDTO);
 
-    public Client toEntity(ClientDTO clientDTO) {
-        return modelMapper.map(clientDTO, Client.class);
-    }
-
-    public List<ClientDTO> toDtoList(List<Client> clients) {
-        return clients.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-    }
+    List<ClientDTO> toDtoList(List<Client> clients);
 }
