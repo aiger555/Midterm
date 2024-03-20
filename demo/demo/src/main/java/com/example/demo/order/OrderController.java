@@ -1,11 +1,14 @@
 package com.example.demo.order;
+
+import com.example.demo.order.OrderService;
+import com.example.demo.DTO.OrderDTO;
+import com.example.demo.Mappers.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -14,35 +17,32 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    // Get all orders
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders() {
-        List<Order> orders = orderService.getAllOrders();
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+        List<OrderDTO> orderDtos = OrderMapper.INSTANCE.toDtoList(orderService.getAllOrders());
+        return new ResponseEntity<>(orderDtos, HttpStatus.OK);
     }
 
-    // Get order by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-        Order order = orderService.getOrderById(id);
-        return new ResponseEntity<>(order, HttpStatus.OK);
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id) {
+        OrderDTO orderDto = OrderMapper.INSTANCE.toDto(orderService.getOrderById(id));
+        return new ResponseEntity<>(orderDto, HttpStatus.OK);
     }
 
-    // Create a new order
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        Order newOrder = orderService.createOrder(order);
-        return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDto) {
+        Order createdOrder = orderService.createOrder(OrderMapper.INSTANCE.toEntity(orderDto));
+        OrderDTO createdOrderDto = OrderMapper.INSTANCE.toDto(createdOrder);
+        return new ResponseEntity<>(createdOrderDto, HttpStatus.CREATED);
     }
 
-    // Update an existing order
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order order) {
-        Order updatedOrder = orderService.updateOrder(id, order);
-        return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
+    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long id, @RequestBody OrderDTO orderDto) {
+        Order updatedOrder = orderService.updateOrder(id, OrderMapper.INSTANCE.toEntity(orderDto));
+        OrderDTO updatedOrderDto = OrderMapper.INSTANCE.toDto(updatedOrder);
+        return new ResponseEntity<>(updatedOrderDto, HttpStatus.OK);
     }
 
-    // Delete an order by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);

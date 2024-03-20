@@ -1,5 +1,7 @@
 package com.example.demo.client;
 
+import com.example.demo.DTO.ClientDTO;
+import com.example.demo.Mappers.ClientMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,39 +16,41 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private ClientMapper clientMapper;
+
     // Get all clients
     @GetMapping
-    public ResponseEntity<List<Client>> getAllClients() {
+    public ResponseEntity<List<ClientDTO>> getAllClients() {
         List<Client> clients = clientService.getAllClients();
-        return new ResponseEntity<>(clients, HttpStatus.OK);
+        List<ClientDTO> clientDtos = clientMapper.toDtoList(clients);
+        return new ResponseEntity<>(clientDtos, HttpStatus.OK);
     }
 
     // Get client by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Client> getClientById(@PathVariable Long id) {
+    public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
         Client client = clientService.getClientById(id);
-        return new ResponseEntity<>(client, HttpStatus.OK);
+        ClientDTO clientDto = clientMapper.toDto(client);
+        return new ResponseEntity<>(clientDto, HttpStatus.OK);
     }
 
     // Create a new client
     @PostMapping
-    public ResponseEntity<Client> createClient(@RequestBody Client client) {
+    public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDto) {
+        Client client = clientMapper.toEntity(clientDto);
         Client newClient = clientService.createClient(client);
-        return new ResponseEntity<>(newClient, HttpStatus.CREATED);
+        ClientDTO newClientDto = clientMapper.toDto(newClient);
+        return new ResponseEntity<>(newClientDto, HttpStatus.CREATED);
     }
 
     // Update an existing client
     @PutMapping("/{id}")
-    public ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody Client client) {
+    public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @RequestBody ClientDTO clientDto) {
+        Client client = clientMapper.toEntity(clientDto);
         Client updatedClient = clientService.updateClient(id, client);
-        return new ResponseEntity<>(updatedClient, HttpStatus.OK);
-    }
-
-    // Partially update an existing client
-    @PatchMapping("/{id}")
-    public ResponseEntity<Client> patchClient(@PathVariable Long id, @RequestBody Client client) {
-        Client patchedClient = clientService.patchClient(id, client);
-        return new ResponseEntity<>(patchedClient, HttpStatus.OK);
+        ClientDTO updatedClientDto = clientMapper.toDto(updatedClient);
+        return new ResponseEntity<>(updatedClientDto, HttpStatus.OK);
     }
 
     // Delete a client by ID

@@ -1,15 +1,14 @@
 package com.example.demo.order;
+
 import com.example.demo.client.Client;
 import com.example.demo.product.Product;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "orders")
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +24,7 @@ public class Order {
     private Integer quantity;
     private OrderStatus status;
 
-    @Column(name = "created_at")
+//    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public Order(Long id, Client client, Product product, Integer quantity, OrderStatus status, LocalDateTime createdAt) {
@@ -107,6 +106,5 @@ public class Order {
                 ", createdAt=" + createdAt +
                 '}';
     }
-
 
 }

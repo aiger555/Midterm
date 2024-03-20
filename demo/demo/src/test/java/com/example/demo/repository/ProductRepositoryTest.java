@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.repository;
 import com.example.demo.product.Product;
 import com.example.demo.product.ProductRepository;
 import com.example.demo.product.ProductService;

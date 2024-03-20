@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.repository;
 
 import com.example.demo.client.Client;
 import com.example.demo.client.ClientRepository;

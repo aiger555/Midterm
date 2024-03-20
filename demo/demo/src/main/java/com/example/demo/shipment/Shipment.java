@@ -2,7 +2,7 @@ package com.example.demo.shipment;
 
 import com.example.demo.order.Order;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

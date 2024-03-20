@@ -55,8 +55,6 @@ public class Client {
         this.name = name;
     }
 
-
-
     public LocalDate getDate() {
         return ddate;
     }
