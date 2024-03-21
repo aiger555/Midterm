@@ -1,14 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.shipment.Shipment;
-import com.example.demo.shipment.ShipmentController;
 import com.example.demo.shipment.ShipmentService;
 import com.example.demo.Mappers.ShipmentMapper;
 import com.example.demo.DTO.ShipmentDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;

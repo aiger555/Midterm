@@ -10,12 +10,13 @@ import java.util.List;
 
 @Mapper
 public interface ProductMapper {
-
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
-    @Mapping(target = "id", ignore = true)
-    Product toEntity(ProductDTO productDto);
-
+    @Mapping(source = "name", target = "name")
     ProductDTO toDto(Product product);
-    List<ProductDTO> toDtoList(List<Product> productList);
+
+    @Mapping(source = "name", target = "name")
+    Product toEntity(ProductDTO productDTO);
+
+    List<ProductDTO> toDtoList(List<Product> products);
 }

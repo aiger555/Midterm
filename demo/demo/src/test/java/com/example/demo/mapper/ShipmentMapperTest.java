@@ -33,15 +33,15 @@ public class ShipmentMapperTest {
     public void testToEntity() {
         // Given
         ShipmentDTO shipmentDTO = new ShipmentDTO();
-        shipmentDTO.setId(1L);
+        shipmentDTO.setId(1L); // Initialize the ID property
 
         // When
         Shipment shipment = shipmentMapper.toEntity(shipmentDTO);
 
         // Then
         assertEquals(shipmentDTO.getId(), shipment.getId());
-
     }
+
 
     @Test
     public void testToDtoList() {

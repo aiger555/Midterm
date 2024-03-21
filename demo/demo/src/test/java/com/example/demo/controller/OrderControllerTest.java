@@ -2,15 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.DTO.OrderDTO;
 import com.example.demo.Mappers.OrderMapper;
-import com.example.demo.client.ClientService;
-import com.example.demo.Mappers.ClientMapper;
 import com.example.demo.order.Order;
-import com.example.demo.order.OrderController;
 import com.example.demo.order.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(OrderController.class)

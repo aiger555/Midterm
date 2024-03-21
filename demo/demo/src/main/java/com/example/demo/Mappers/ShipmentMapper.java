@@ -13,7 +13,7 @@ public interface ShipmentMapper {
 
     ShipmentMapper INSTANCE = Mappers.getMapper(ShipmentMapper.class);
 
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", source = "id")
     Shipment toEntity(ShipmentDTO shipmentDto);
 
     ShipmentDTO toDto(Shipment shipment);
