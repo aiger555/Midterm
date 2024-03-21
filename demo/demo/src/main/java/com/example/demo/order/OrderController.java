@@ -3,13 +3,16 @@ package com.example.demo.order;
 import com.example.demo.DTO.OrderDTO;
 import com.example.demo.Mappers.OrderMapper;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/orders")
+@Validated
 public class OrderController {
 
     @Autowired
@@ -34,7 +37,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDto) {
+    public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody OrderDTO orderDto) {
         try {
             Order order = orderMapper.toEntity(orderDto);
             Order newOrder = orderService.createOrder(order);

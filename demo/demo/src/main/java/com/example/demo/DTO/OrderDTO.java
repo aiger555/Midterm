@@ -1,10 +1,15 @@
 package com.example.demo.DTO;
 
 
+import jakarta.validation.constraints.NotBlank;
+
 public class OrderDTO {
     private Long id;
+    @NotBlank(message = "clientID cannot be blank")
     private Long clientId;
+    @NotBlank(message = "productID cannot be blank")
     private Long productId;
+
     private int quantity;
     private String status;
 

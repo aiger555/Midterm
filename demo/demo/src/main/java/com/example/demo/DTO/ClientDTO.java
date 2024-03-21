@@ -1,11 +1,15 @@
 package com.example.demo.DTO;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDate;
 
 
 public class ClientDTO {
 
     private Long id;
+    @NotBlank(message = "Name cannot be blank")
     private String name;
+    @NotBlank(message = "phone number cannot be blank")
     private String phoneNumber;
     private LocalDate date;
 

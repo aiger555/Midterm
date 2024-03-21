@@ -1,14 +1,18 @@
 package com.example.demo.DTO;
 
 
+import jakarta.validation.constraints.NotBlank;
+
 import java.math.BigDecimal;
 
 public class ShipmentDTO {
 
     private Long id;
+    @NotBlank(message = "recipientName cannot be blank")
     private String recipientName;
     private String address;
     private BigDecimal weight;
+    @NotBlank(message = "trackingNumber cannot be blank")
     private String trackingNumber;
 
     // Getters and setters

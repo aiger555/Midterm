@@ -1,10 +1,13 @@
 package com.example.demo.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+
 import java.math.BigDecimal;
 
 public class ProductDTO {
 
     private Long id;
+    @NotBlank(message = "Name cannot be blank")
     private String name;
     private BigDecimal price;
     private int quantity;

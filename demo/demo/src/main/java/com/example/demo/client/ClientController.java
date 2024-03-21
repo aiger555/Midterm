@@ -3,13 +3,16 @@ package com.example.demo.client;
 import com.example.demo.DTO.ClientDTO;
 import com.example.demo.Mappers.ClientMapper;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/clients")
+@Validated
 public class ClientController {
 
     @Autowired
@@ -36,7 +39,7 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDto) {
+    public ResponseEntity<ClientDTO> createClient(@Valid @RequestBody ClientDTO clientDto) {
         try {
             Client client = clientMapper.toEntity(clientDto);
             Client newClient = clientService.createClient(client);

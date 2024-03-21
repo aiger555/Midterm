@@ -3,13 +3,16 @@ package com.example.demo.shipment;
 import com.example.demo.DTO.ShipmentDTO;
 import com.example.demo.Mappers.ShipmentMapper;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/shipments")
+@Validated
 public class ShipmentController {
 
     @Autowired
@@ -34,7 +37,7 @@ public class ShipmentController {
     }
 
     @PostMapping
-    public ResponseEntity<ShipmentDTO> createShipment(@RequestBody ShipmentDTO shipmentDto) {
+    public ResponseEntity<ShipmentDTO> createShipment(@Valid @RequestBody ShipmentDTO shipmentDto) {
         try {
             Shipment shipment = shipmentMapper.toEntity(shipmentDto);
             Shipment newShipment = shipmentService.createShipment(shipment);

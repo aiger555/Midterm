@@ -3,13 +3,16 @@ package com.example.demo.product;
 import com.example.demo.DTO.ProductDTO;
 import com.example.demo.Mappers.ProductMapper;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@Validated
 public class ProductController {
 
     @Autowired
@@ -34,7 +37,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDto) {
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDto) {
         try {
             Product product = productMapper.toEntity(productDto);
             Product newProduct = productService.createProduct(product);
