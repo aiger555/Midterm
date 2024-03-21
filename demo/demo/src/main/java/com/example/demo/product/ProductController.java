@@ -2,12 +2,11 @@ package com.example.demo.product;
 
 import com.example.demo.DTO.ProductDTO;
 import com.example.demo.Mappers.ProductMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -18,50 +17,58 @@ public class ProductController {
 
     private ProductMapper productMapper;
 
-    // Get all products
-    @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        // Convert Product entities to ProductDto objects using the mapper
-        List<ProductDTO> productDtos = productMapper.toDtoList(products);
-        return new ResponseEntity<>(productDtos, HttpStatus.OK);
-    }
-
-    // Get product by ID
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
-        // Convert Product entity to ProductDto object using the mapper
-        ProductDTO productDto = productMapper.toDto(product);
-        return new ResponseEntity<>(productDto, HttpStatus.OK);
+        try {
+            Product product = productService.getProductById(id);
+            if (product == null) {
+                throw new EntityNotFoundException("Product not found with id: " + id);
+            }
+            ProductDTO productDto = productMapper.toDto(product);
+            return new ResponseEntity<>(productDto, HttpStatus.OK);
+        } catch (EntityNotFoundException ex) {
+            return new ResponseEntity<>(new ProductDTO(), HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(new ProductDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // Create a new product
     @PostMapping
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDto) {
-        // Convert ProductDto object to Product entity using the mapper
-        Product product = productMapper.toEntity(productDto);
-        Product newProduct = productService.createProduct(product);
-        // Convert created Product entity to ProductDto object using the mapper
-        ProductDTO newProductDto = productMapper.toDto(newProduct);
-        return new ResponseEntity<>(newProductDto, HttpStatus.CREATED);
+        try {
+            Product product = productMapper.toEntity(productDto);
+            Product newProduct = productService.createProduct(product);
+            ProductDTO newProductDto = productMapper.toDto(newProduct);
+            return new ResponseEntity<>(newProductDto, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(new ProductDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // Update an existing product
     @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDto) {
-        // Convert ProductDto object to Product entity using the mapper
-        Product product = productMapper.toEntity(productDto);
-        Product updatedProduct = productService.updateProduct(id, product);
-        // Convert updated Product entity to ProductDto object using the mapper
-        ProductDTO updatedProductDto = productMapper.toDto(updatedProduct);
-        return new ResponseEntity<>(updatedProductDto, HttpStatus.OK);
+        try {
+            Product product = productMapper.toEntity(productDto);
+            Product updatedProduct = productService.updateProduct(id, product);
+            ProductDTO updatedProductDto = productMapper.toDto(updatedProduct);
+            return new ResponseEntity<>(updatedProductDto, HttpStatus.OK);
+        } catch (EntityNotFoundException ex) {
+            return new ResponseEntity<>(productDto, HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(productDto, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // Delete a product by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            productService.deleteProduct(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (EntityNotFoundException ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
 }

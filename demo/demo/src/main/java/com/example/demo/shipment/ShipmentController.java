@@ -2,12 +2,11 @@ package com.example.demo.shipment;
 
 import com.example.demo.DTO.ShipmentDTO;
 import com.example.demo.Mappers.ShipmentMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/shipments")
@@ -18,44 +17,58 @@ public class ShipmentController {
 
     private ShipmentMapper shipmentMapper;
 
-    // Get all shipments
-    @GetMapping
-    public ResponseEntity<List<ShipmentDTO>> getAllShipments() {
-        List<Shipment> shipments = shipmentService.getAllShipments();
-        List<ShipmentDTO> shipmentDtos = shipmentMapper.toDtoList(shipments);
-        return new ResponseEntity<>(shipmentDtos, HttpStatus.OK);
-    }
-
-    // Get shipment by ID
     @GetMapping("/{id}")
     public ResponseEntity<ShipmentDTO> getShipmentById(@PathVariable Long id) {
-        Shipment shipment = shipmentService.getShipmentById(id);
-        ShipmentDTO shipmentDto = shipmentMapper.toDto(shipment);
-        return new ResponseEntity<>(shipmentDto, HttpStatus.OK);
+        try {
+            Shipment shipment = shipmentService.getShipmentById(id);
+            if (shipment == null) {
+                throw new EntityNotFoundException("Shipment not found with id: " + id);
+            }
+            ShipmentDTO shipmentDto = shipmentMapper.toDto(shipment);
+            return new ResponseEntity<>(shipmentDto, HttpStatus.OK);
+        } catch (EntityNotFoundException ex) {
+            return new ResponseEntity<>(new ShipmentDTO(), HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(new ShipmentDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // Create a new shipment
     @PostMapping
     public ResponseEntity<ShipmentDTO> createShipment(@RequestBody ShipmentDTO shipmentDto) {
-        Shipment shipment = shipmentMapper.toEntity(shipmentDto);
-        Shipment newShipment = shipmentService.createShipment(shipment);
-        ShipmentDTO newShipmentDto = shipmentMapper.toDto(newShipment);
-        return new ResponseEntity<>(newShipmentDto, HttpStatus.CREATED);
+        try {
+            Shipment shipment = shipmentMapper.toEntity(shipmentDto);
+            Shipment newShipment = shipmentService.createShipment(shipment);
+            ShipmentDTO newShipmentDto = shipmentMapper.toDto(newShipment);
+            return new ResponseEntity<>(newShipmentDto, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(shipmentDto, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // Update an existing shipment
     @PutMapping("/{id}")
     public ResponseEntity<ShipmentDTO> updateShipment(@PathVariable Long id, @RequestBody ShipmentDTO shipmentDto) {
-        Shipment shipment = shipmentMapper.toEntity(shipmentDto);
-        Shipment updatedShipment = shipmentService.updateShipment(id, shipment);
-        ShipmentDTO updatedShipmentDto = shipmentMapper.toDto(updatedShipment);
-        return new ResponseEntity<>(updatedShipmentDto, HttpStatus.OK);
+        try {
+            Shipment shipment = shipmentMapper.toEntity(shipmentDto);
+            Shipment updatedShipment = shipmentService.updateShipment(id, shipment);
+            ShipmentDTO updatedShipmentDto = shipmentMapper.toDto(updatedShipment);
+            return new ResponseEntity<>(updatedShipmentDto, HttpStatus.OK);
+        } catch (EntityNotFoundException ex) {
+            return new ResponseEntity<>(shipmentDto, HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(shipmentDto, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // Delete a shipment by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteShipment(@PathVariable Long id) {
-        shipmentService.deleteShipment(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            shipmentService.deleteShipment(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (EntityNotFoundException ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
 }
