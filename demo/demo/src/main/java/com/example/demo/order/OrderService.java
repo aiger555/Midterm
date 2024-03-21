@@ -14,13 +14,16 @@ import java.util.Optional;
 
 @Service
 public class OrderService {
-
+    @Autowired
     private OrderRepository orderRepository;
-
+    @Autowired
     private ClientRepository clientRepository;
-
+    @Autowired
     private ProductRepository productRepository;
-
+    @Autowired
+    public OrderService(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
     // Get all orders
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
@@ -69,7 +72,6 @@ public class OrderService {
     public void deleteOrder(Long id) {
         orderRepository.deleteById(id);
     }
-
     public Order save(Order order) {
         return orderRepository.save(order);
     }

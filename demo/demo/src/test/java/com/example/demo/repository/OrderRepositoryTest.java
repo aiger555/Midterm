@@ -7,7 +7,11 @@ import com.example.demo.order.OrderService;
 import com.example.demo.order.OrderStatus;
 import com.example.demo.product.Product;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -18,17 +22,22 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 
 @DataJpaTest
 public class OrderRepositoryTest {
 
-    @MockBean
+    @Mock
     private OrderRepository orderRepository;
 
     @InjectMocks
     private OrderService orderService;
+
+    public OrderRepositoryTest() {
+        MockitoAnnotations.initMocks(this); // Initialize Mockito annotations
+    }
 
     @Test
     public void testFindAllOrders() {
@@ -94,22 +103,17 @@ public class OrderRepositoryTest {
 
     @Test
     public void testDeleteOrder() {
-        LocalDate createdD = LocalDate.of(2024, 3, 25); // LocalDateTime for Product1
-        LocalDateTime createdAt1 = LocalDateTime.of(2024, 3, 25, 9, 22); // LocalDateTime for Product1
 
         // Given
         Long orderId = 1L;
-        Client client = new Client(1L, "Marya Kim", "965452455", createdD);
-        Product product = new Product("Product C", "Description C", BigDecimal.valueOf(100), 40, createdAt1);
-        Order order = new Order(client, product, 2, OrderStatus.PLACED, createdAt1);
 
         // When
-        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
         orderService.deleteOrder(orderId);
 
         // Then
         assertThat(orderRepository.findById(orderId)).isEmpty();
     }
+
 
 }
 
