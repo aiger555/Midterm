@@ -5,6 +5,7 @@ import com.example.demo.shipment.ShipmentController;
 import com.example.demo.shipment.ShipmentService;
 import com.example.demo.Mappers.ShipmentMapper;
 import com.example.demo.DTO.ShipmentDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,8 +24,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ShipmentController.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 public class ShipmentControllerTest {
 
@@ -54,10 +59,31 @@ public class ShipmentControllerTest {
         // Sending GET request
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shipments")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").exists());
     }
+    @Test
+    public void createShipment_WhenInvalidData_ReturnsBadRequest() throws Exception {
+        // Arrange
+        ShipmentDTO invalidShipmentDto = new ShipmentDTO();
+        invalidShipmentDto.setRecipientName("");
 
-    // Add more test methods for other endpoints...
+        // Act & Assert
+        mockMvc.perform(post("/api/v1/shipments")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(invalidShipmentDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    // Utility method to convert object to JSON string
+    private String asJsonString(Object object) {
+        try {
+            return new ObjectMapper().writeValueAsString(object);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
