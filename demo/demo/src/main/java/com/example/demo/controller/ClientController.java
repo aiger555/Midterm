@@ -12,15 +12,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/clients")
 @Validated
 public class ClientController {
 
-    @Autowired
     private ClientService clientService;
 
     private ClientMapper clientMapper;
+
+    @GetMapping
+    public ResponseEntity<List<ClientDTO>> getAllClients() {
+        List<ClientDTO> clientDTOs = new ArrayList<>();
+        List<Client> clients = clientService.getAllClients();
+        for (Client client : clients) {
+            clientDTOs.add(clientMapper.toDto(client));
+        }
+        return new ResponseEntity<>(clientDTOs, HttpStatus.OK);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
@@ -35,9 +48,9 @@ public class ClientController {
         } catch (EntityNotFoundException ex) {
             return new ResponseEntity<>(clientDto, HttpStatus.NOT_FOUND);
         }
-//         catch (Exception ex) {
-//            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
+         catch (Exception ex) {
+            return new ResponseEntity<>(clientDto, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping

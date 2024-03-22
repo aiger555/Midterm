@@ -7,29 +7,23 @@ import com.example.demo.order.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(OrderController.class)
-@SpringBootTest
-@AutoConfigureMockMvc
 public class OrderControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
 
     @Mock
@@ -38,9 +32,13 @@ public class OrderControllerTest {
     @Mock
     private OrderMapper orderMapper;
 
+    @InjectMocks
+    private OrderController orderController;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
     }
 
     @Test
@@ -53,13 +51,29 @@ public class OrderControllerTest {
         List<OrderDTO> orderDTOs = Arrays.asList(new OrderDTO(), new OrderDTO());
         when(orderMapper.toDtoList(orders)).thenReturn(orderDTOs);
 
-        // Sending GET request
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/orders")
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/orders"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").exists());
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").exists());
     }
+
+    @Test
+    public void testCreateOrder() throws Exception {
+        OrderDTO orderDTO = new OrderDTO();
+
+        Order order = new Order();
+        order.setId(1L);
+
+        when(orderMapper.toEntity(orderDTO)).thenReturn(order);
+        when(orderService.createOrder(order)).thenReturn(order);
+
+        mockMvc.perform(post("/api/v1/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"orderName\": \"Test Order\" }")) // Corrected content here
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").exists());
+    }
+
     @Test
     public void createOrder_WhenInvalidData_ReturnsBadRequest() throws Exception {
         // Arrange
